@@ -1,0 +1,39 @@
+{
+  "id": "google-rate-limiter",
+  "name": "Google Rate Limiter",
+  "description": "Enforces an optimized 4.2-second sliding window between LLM requests to prevent Google AI Studio free-tier 429 rate limits across throttled namespaces.",
+  "version": "1.1.0",
+  "extensions": ["./dist/index.js"],
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "minIntervalMs": {
+        "type": "number",
+        "default": 4200,
+        "description": "Minimum delay in milliseconds between requests for throttled namespaces."
+      },
+      "throttledNamespaces": {
+        "type": "array",
+        "items": { "type": "string" },
+        "default": ["google-test", "telegram", "background"],
+        "description": "Namespaces subject to the sliding window FIFO rate-limiting queue."
+      },
+      "bypassNamespaces": {
+        "type": "array",
+        "items": { "type": "string" },
+        "default": ["gemini-clean"],
+        "description": "Namespaces that bypass the rate limiter completely with zero added latency."
+      }
+    },
+    "additionalProperties": false
+  },
+  "openclaw": {
+    "compat": {
+      "pluginApi": ">=2026.11.10"
+    },
+    "build": {
+      "openclawVersion": ">=2026.11.10"
+    },
+    "extensions": ["./dist/index.js"]
+  }
+}
